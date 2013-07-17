@@ -1,0 +1,17 @@
+== Description ==
+<h3>What is Audio Player?</h3>
+
+Audio Player is a section that turns your site into an audio player where users can listen to tracks you choose. If you are an artist, music blogger or need to show off what is possible with PageLines, then you need this. You can have as many playlists as you want and Audio Tracks, which is a custom post type, can appear on multiple playlists.
+
+Audio Player supports multiple audio sources including local audio, Podcasts and SoundCloud.
+
+You will love it! <strong>Buy it! :)</strong>
+
+<h3>Support</h3>
+
+Please do not leave a review as a support question, they are for reviews. I am not notified of these reviews, and I have no way to respond to you. Please <strong>do not email me for support</strong>, because you will not receive a reply. If you need assistance, click the link in the box below - this link leads you to the forums where you can get support. <strong>Thanks!</strong>
+
+== Changelog ==
+
+= 1.0 =
+* Initial Release
