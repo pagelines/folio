@@ -1,9 +1,7 @@
 == Description ==
-<h3>What is Audio Player?</h3>
+<h3>What is Folio?</h3>
 
-Audio Player is a section that turns your site into an audio player where users can listen to tracks you choose. If you are an artist, music blogger or need to show off what is possible with PageLines, then you need this. You can have as many playlists as you want and Audio Tracks, which is a custom post type, can appear on multiple playlists.
-
-Audio Player supports multiple audio sources including local audio, Podcasts and SoundCloud.
+Folio is a great section for displaying your work and projects. Folio uses custom post types, which makes it easy for you to organize.
 
 You will love it! <strong>Buy it! :)</strong>
 
