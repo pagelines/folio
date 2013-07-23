@@ -9,6 +9,7 @@ Class Name: Folio
 Cloning: true
 Demo: http://folio.ahansson.com
 Version: 1.0
+v3: true
 */
 
 class Folio extends PageLinesSection {
