@@ -1,14 +1,12 @@
 <?php
-/* 
+/*
 Section: Folio
 Author: Aleksander Hansson
 Author URI: http://ahansson.com
-Description: Folio is a Custom Post Type section that is helping you to show your work in a nice way.
 Workswith: main, templates
 Class Name: Folio
 Cloning: true
 Demo: http://folio.ahansson.com
-Version: 1.0
 v3: true
 */
 
@@ -16,7 +14,6 @@ class Folio extends PageLinesSection {
 
 	var $ptID = 'folio';
 	var $taxID = 'folio-cat';
-	const version = '1.0';
 
 	function section_persistent(){
 
@@ -50,6 +47,8 @@ class Folio extends PageLinesSection {
 		$args = array(
 			'post_type'	=> $this->ptID,
 			'post_status'   => 'publish',
+			'nopaging' => true,
+			'post_per_page' => 99999, //needs to be something unreal
 //			'orderby' => $orderby,
 //			'order'=> $order,
 			$this->taxID => $category,
@@ -84,24 +83,26 @@ class Folio extends PageLinesSection {
 										<div class="folio-screenshot" style="height:<?php echo $height; ?>px;">
 											<img class="center" src="<?php echo $thumb['0'] ?>" width="500" height="<?php echo $height; ?>">
 											<div class="folio-overlay span4">
-												<div class="folio-title">
-													<h4><?php echo get_the_title(); ?></h4>
-												</div>
-												<div class="folio-buttons">
-													<?php
-														if ($link) {
-															?>
-																<a href="<?php echo $link; ?>" class="btn btn-primary"><?php _e( 'Link', 'folio' ); ?></a>
-															<?php
-														}
+												<div class="folio-overlay-content">
+													<div class="folio-title">
+														<h4><?php echo get_the_title(); ?></h4>
+													</div>
+													<div class="folio-buttons">
+														<?php
+															if ($link) {
+																?>
+																	<a href="<?php echo $link; ?>" class="btn btn-primary"><?php echo __( 'Link', 'folio' ); ?></a>
+																<?php
+															}
 
-														if ( get_the_content() ) {
-															?>
-																<!-- Button to trigger modal -->
-																<a href="#folio-modal-<?php the_ID(); ?>" role="button" class="btn btn-primary" data-toggle="modal"><?php _e( 'Details', 'folio' ); ?></a>
-															<?php
-														}
-													?>
+															if ( get_the_content() ) {
+																?>
+																	<!-- Button to trigger modal -->
+																	<a href="#folio-modal-<?php the_ID(); ?>" role="button" class="btn btn-primary" data-toggle="modal"><?php echo __( 'Details', 'folio' ); ?></a>
+																<?php
+															}
+														?>
+													</div>
 												</div>
 											</div>
 											<?php
@@ -114,10 +115,10 @@ class Folio extends PageLinesSection {
 																<h3 id="myModalLabel"><?php echo get_the_title(); ?></h3>
 															</div>
 														  	<div class="modal-body">
-														    	<p><?php echo get_the_content(); ?></p>
+														    	<?php echo do_shortcode( get_the_content() ); ?>
 														  	</div>
 														  	<div class="modal-footer">
-														    	<button class="btn" data-dismiss="modal" aria-hidden="true"><?php _e( 'Close', 'folio' ); ?></button>
+														    	<button class="btn" data-dismiss="modal" aria-hidden="true"><?php echo __( 'Close', 'folio' ); ?></button>
 														  	</div>
 														</div>
 													<?php
@@ -138,7 +139,7 @@ class Folio extends PageLinesSection {
 
 		} else {
 			?>
-				<p class="no-posts"><?php _e('There is no Folios to show!', 'folio'); ?></p>
+				<p class="no-posts"><?php __('There is no Folios to show!', 'folio'); ?></p>
 			<?php
 		}
 
@@ -206,7 +207,6 @@ class Folio extends PageLinesSection {
 
 		$this->post_type = new PageLinesPostType( $this->ptID, $args, $taxonomies,$columns,array(&$this, 'column_display'));
 
-		flush_rewrite_rules();
 	}
 
 

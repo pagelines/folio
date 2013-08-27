@@ -11,8 +11,10 @@
 			}
 			.folio-overlay {
 				position: absolute;
-				top: 0;
-				left: 0;
+     			top:0;
+		        left:0;
+		        right:0;
+		        bottom:0;
 				width:100%;
 				text-align: center;
 				height: 100%;
@@ -35,9 +37,27 @@
 				    -o-transition: opacity 1.0s linear;  /* Opera 10.5+ */
 				    transition: opacity 1.0s linear;
 				}
-				.folio-title {
-					margin-top: 30%;
+				&:before {
+			        content: '';
+			        display: inline-block;
+			        height: 100%;
+			        vertical-align: middle;
+			        margin-right: -0.25em;
+			    }
+				.folio-overlay-content {
 					color:white;
+			        display: inline-block;
+			        vertical-align: middle;
+			        position:relative;
+			        .folio-title {
+				        font-weight:bold;
+				        margin-bottom: 10px;
+					}
+					.folio-buttons {
+						a {
+							width:75px;
+						}
+					}
 				}
 			}
 		}
