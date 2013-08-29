@@ -8,6 +8,7 @@ Class Name: Folio
 Cloning: true
 Demo: http://folio.ahansson.com
 v3: true
+Filter: format
 */
 
 class Folio extends PageLinesSection {
