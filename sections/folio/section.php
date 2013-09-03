@@ -28,12 +28,25 @@ class Folio extends PageLinesSection {
 
 		$prefix = ($clone_id != '') ? 'clone'.$clone_id : '';
 
+		$open_in_new = ( $this->opt( 'single_open_in_new', $this->oset ) );
+
 		?>
 
 			<script type="text/javascript">
 				jQuery(document).ready(function(){
-					jQuery('.folio-modal').appendTo(jQuery('body'))
+					jQuery('.folio-modal').appendTo(jQuery('body'));
+					<?php
+						if($open_in_new) {
+							?>
+								jQuery('a.btn-folio-link-<?php echo $prefix; ?>').click(function(){
+							    	window.open(this.href);
+								    return false;
+								});
+							<?php
+						}
+					?>
 				})
+
 			</script>
 
 		<?php
@@ -75,9 +88,11 @@ class Folio extends PageLinesSection {
 
 								$link = ( get_post_meta( $post->ID,'single_folio_link', $this->oset ) );
 
+								$button = ( $this->opt( 'folio_button', $this->oset ) ) ? $this->opt( 'folio_button', $this->oset ) : 'btn-primary';
+
 								$thumb = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'large' );
 
-								$height = ( ploption( 'folio_height', $this->oset ) ) ? ploption( 'folio_height', $this->oset ) : '250';
+								$height = ( $this->opt( 'folio_height', $this->oset ) ) ? $this->opt( 'folio_height', $this->oset ) : '250';
 
 								?>
 									<li class="span4 folio-<?php the_ID(); ?>">
@@ -92,14 +107,14 @@ class Folio extends PageLinesSection {
 														<?php
 															if ($link) {
 																?>
-																	<a href="<?php echo $link; ?>" class="btn btn-primary"><?php echo __( 'Link', 'folio' ); ?></a>
+																	<a href="<?php echo $link; ?>" class="btn <?php echo $button; ?> btn-folio-link-<?php echo $prefix; ?>"><?php echo __( 'Link', 'folio' ); ?></a>
 																<?php
 															}
 
 															if ( get_the_content() ) {
 																?>
 																	<!-- Button to trigger modal -->
-																	<a href="#folio-modal-<?php the_ID(); ?>" role="button" class="btn btn-primary" data-toggle="modal"><?php echo __( 'Details', 'folio' ); ?></a>
+																	<a href="#folio-modal-<?php the_ID(); ?>" role="button" class="btn <?php echo $button; ?> btn-folio-details" data-toggle="modal"><?php echo __( 'Details', 'folio' ); ?></a>
 																<?php
 															}
 														?>
@@ -168,6 +183,16 @@ class Folio extends PageLinesSection {
 				'inputlabel'  => __( 'Folio Thumbnail Height In px', 'folio' ),
 				'type'   => 'text',
 				'title'   => __( 'Image Dimension', 'folio' ),
+			),
+
+			'folio_button'  => array(
+				'inputlabel'  => __( 'Choose button type', 'folio' ),
+				'type'   => 'select_button',
+				'title'   => __( 'Button Type', 'folio' ),
+			),
+			'single_open_in_new'  => array(
+				'inputlabel'  => __( 'Open link in new window?', 'folio' ),
+				'type'   => 'check',
 			),
 
 		);
