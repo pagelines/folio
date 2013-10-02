@@ -82,6 +82,8 @@ class Folio extends PageLinesSection {
 					<ul class="folio-container row">
 						<?php
 
+							$i = 1;
+
 							while ( $loop->have_posts() ) : $loop->the_post();
 
 								global $post;
@@ -113,7 +115,6 @@ class Folio extends PageLinesSection {
 
 															if ( get_the_content() ) {
 																?>
-																	<!-- Button to trigger modal -->
 																	<a href="#folio-modal-<?php the_ID(); ?>" role="button" class="btn <?php echo $button; ?> btn-folio-details" data-toggle="modal"><?php echo __( 'Details', 'folio' ); ?></a>
 																<?php
 															}
@@ -124,7 +125,6 @@ class Folio extends PageLinesSection {
 											<?php
 												if ( get_the_content() ) {
 													?>
-														<!-- Modal -->
 														<div id="folio-modal-<?php the_ID(); ?>" class="modal hide fade folio-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 															<div class="modal-header">
 																<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
@@ -143,6 +143,10 @@ class Folio extends PageLinesSection {
 										</div>
 									</li>
 								<?php
+
+								if($i % 3 == 0) {echo '</ul><ul class="folio-container row">';}
+
+							$i++;
 
 							endwhile;
 
@@ -164,12 +168,34 @@ class Folio extends PageLinesSection {
 	function section_optionator($settings) {
 		$settings = wp_parse_args($settings, $this->optionator_default);
 
+		$how_to_use = '
+			<strong>1.</strong> Go to Wordpress backend and create a new Folio. </br></br>
+			<strong>2.</strong> Input Title, Content (Optional), and a Link to the Folio (Optional). You also have to set a Thumbnail for the Folio. </br></br>
+			<strong>3.</strong> Choose Categories for your Folio . </br></br>
+			<strong>4.</strong> Go back to Folio\'s Section options and choose which category to show. Here you can also set the thumbnail height.
+
+			<div class="row zmb">
+				<div class="span6 tac zmb">
+					<a class="btn btn-info" href="http://forum.pagelines.com/71-products-by-aleksander-hansson/" target="_blank" style="padding:4px 0 4px;width:100%"><i class="icon-ambulance"></i>          Forum</a>
+				</div>
+				<div class="span6 tac zmb">
+					<a class="btn btn-info" href="http://betterdms.com" target="_blank" style="padding:4px 0 4px;width:100%"><i class="icon-align-justify"></i>          Better DMS</a>
+				</div>
+			</div>
+			<div class="row zmb" style="margin-top:4px;">
+				<div class="span12 tac zmb">
+					<a class="btn btn-success" href="http://shop.ahansson.com" target="_blank" style="padding:4px 0 4px;width:100%"><i class="icon-shopping-cart" ></i>          My Shop</a>
+				</div>
+			</div>
+
+		';
+
 		$tab = array(
 
 			'folio_help'  => array(
 				'title'  => __( 'How To Use', 'folio' ),
 				'type'   => 'help',
-				'exp'   => __( '1. Go to Wordpress backend and create a new Folio. </br></br>2. Input Title, Content (Optional), and a Link to the Folio (Optional). You also have to set a Thumbnail for the Folio. </br></br>3. Choose Categories for your Folio . </br></br>4. Go back to Folio\'s Section options and choose which category to show. Here you can also set the thumbnail height.', 'folio' ),
+				'exp'   => $how_to_use,
 			),
 
 			'folio_tax_select' => array(
@@ -238,12 +264,34 @@ class Folio extends PageLinesSection {
 
 	function post_meta_setup(){
 
+		$how_to_use = '
+			<strong>1.</strong> Go to Wordpress backend and create a new Folio. </br></br>
+			<strong>2.</strong> Input Title, Content (Optional), and a Link to the Folio (Optional). You also have to set a Thumbnail for the Folio. </br></br>
+			<strong>3.</strong> Choose Categories for your Folio . </br></br>
+			<strong>4.</strong> Go back to Folio\'s Section options and choose which category to show. Here you can also set the thumbnail height.
+
+			<div class="row zmb">
+				<div class="span6 tac zmb">
+					<a class="btn btn-info" href="http://forum.pagelines.com/71-products-by-aleksander-hansson/" target="_blank" style="padding:4px 0 4px;width:100%"><i class="icon-ambulance"></i>          Forum</a>
+				</div>
+				<div class="span6 tac zmb">
+					<a class="btn btn-info" href="http://betterdms.com" target="_blank" style="padding:4px 0 4px;width:100%"><i class="icon-align-justify"></i>          Better DMS</a>
+				</div>
+			</div>
+			<div class="row zmb" style="margin-top:4px;">
+				<div class="span12 tac zmb">
+					<a class="btn btn-success" href="http://shop.ahansson.com" target="_blank" style="padding:4px 0 4px;width:100%"><i class="icon-shopping-cart" ></i>          My Shop</a>
+				</div>
+			</div>
+
+		';
+
 		$type_meta_array = array(
 
 			'single_folio_help'  => array(
 				'title'  => __( 'How To Use', 'folio' ),
 				'type'   => 'help',
-				'exp'   => __( '1. Go to Wordpress backend and create a new Folio. </br></br>2. Input Title, Content (Optional), and a Link to the Folio (Optional). You also have to set a Thumbnail for the Folio. </br></br>3. Choose Categories for your Folio . </br></br>4. Go back to Folio\'s Section options and choose which category to show. Here you can also set the thumbnail height.', 'folio' ),
+				'exp'   => $how_to_use,
 			),
 
 			'single_folio_options' => array(
@@ -258,11 +306,6 @@ class Folio extends PageLinesSection {
 				),
 			),
 
-//			'single_ap_directions'	=> array(
-//				'type'		=> '',
-//				'title'	=> __('<strong style="display:block;font-size:16px;color:#eaeaea;text-shadow:0 1px 0 black;padding:7px 7px 5px;background:#333;margin-top:5px;border-radius:3px;border:1px solid white;letter-spacing:0.1em;box-shadow:inset 0 0 3px black;">HOW TO USE:</strong>', 'folio'),
-//				'shortexp'   => __('', 'folio'),
-//			),
 		);
 
 		$post_types = array($this->id);
