@@ -19,7 +19,12 @@ class Folio extends PageLinesSection {
 	function section_persistent(){
 
 		$this->post_type_setup();
-		$this->post_meta_setup();
+
+		if(! class_exists( 'CMB_Meta_Box' ) ) {
+			require_once( 'custom-meta/custom-meta-boxes.php' );
+		}
+
+		add_filter( 'cmb_meta_boxes', array( &$this, 'custom_meta' ) );
 
 	}
 
@@ -165,15 +170,18 @@ class Folio extends PageLinesSection {
 
 	}
 
-	function section_optionator($settings) {
-		$settings = wp_parse_args($settings, $this->optionator_default);
+	function section_opts() {
 
-		$how_to_use = '
+		$options = array();
+
+		$how_to_use = __( '
+			<strong>Read the instructions below before asking for additional help:</strong>
+			</br></br>
 			<strong>1.</strong> Go to Wordpress backend and create a new Folio. </br></br>
 			<strong>2.</strong> Input Title, Content (Optional), and a Link to the Folio (Optional). You also have to set a Thumbnail for the Folio. </br></br>
 			<strong>3.</strong> Choose Categories for your Folio . </br></br>
 			<strong>4.</strong> Go back to Folio\'s Section options and choose which category to show. Here you can also set the thumbnail height.
-
+			</br></br>
 			<div class="row zmb">
 				<div class="span6 tac zmb">
 					<a class="btn btn-info" href="http://forum.pagelines.com/71-products-by-aleksander-hansson/" target="_blank" style="padding:4px 0 4px;width:100%"><i class="icon-ambulance"></i>          Forum</a>
@@ -187,51 +195,49 @@ class Folio extends PageLinesSection {
 					<a class="btn btn-success" href="http://shop.ahansson.com" target="_blank" style="padding:4px 0 4px;width:100%"><i class="icon-shopping-cart" ></i>          My Shop</a>
 				</div>
 			</div>
+		', 'folio' );
 
-		';
+		$options[] = array(
+			'key' => 'folio_help',
+			'type'     => 'template',
+			'template'      => do_shortcode( $how_to_use ),
+			'title' =>__( 'How to use:', 'folio' ) ,
+		);
 
-		$tab = array(
+		$options[] = array(
+			'key' => 'folio_settings',
+			'title' => __( 'Folio Settings', 'folio' ),
+			'type'	=> 'multi',
+			'opts'	=> array(
 
-			'folio_help'  => array(
-				'title'  => __( 'How To Use', 'folio' ),
-				'type'   => 'help',
-				'exp'   => $how_to_use,
-			),
+				array(
+					'key' => 'folio_tax_select',
+					'type' 			=> 'select_taxonomy',
+					'post_type'	=> 'folio',
+					'label'	=> __( 'Category To Show', 'folio' ),
+				),
 
-			'folio_tax_select' => array(
-				'type' 			=> 'select_taxonomy',
-				'taxonomy_id'	=> $this->taxID,
-				'inputlabel'	=> __( 'Category To Show', 'folio' ),
-				'title'	=> __( 'Category', 'folio' )
-			),
+				array(
+					'key' => 'folio_height',
+					'label'  => __( 'Folio Thumbnail Height In px', 'folio' ),
+					'type'   => 'text',
+				),
 
-			'folio_height'  => array(
-				'inputlabel'  => __( 'Folio Thumbnail Height In px', 'folio' ),
-				'type'   => 'text',
-				'title'   => __( 'Image Dimension', 'folio' ),
-			),
-
-			'folio_button'  => array(
-				'inputlabel'  => __( 'Choose button type', 'folio' ),
-				'type'   => 'select_button',
-				'title'   => __( 'Button Type', 'folio' ),
-			),
-			'single_open_in_new'  => array(
-				'inputlabel'  => __( 'Open link in new window?', 'folio' ),
-				'type'   => 'check',
-			),
+				array(
+					'key' => 'folio_button',
+					'label'  => __( 'Choose button type', 'folio' ),
+					'type'   => 'select_button',
+				),
+				array(
+					'key' => 'single_open_in_new',
+					'label'  => __( 'Open link in new window?', 'folio' ),
+					'type'   => 'check',
+				),
+			)
 
 		);
 
-		$tab_settings = array(
-			'id'		=> 'folio_meta',
-			'name'	=> 'Folio',
-			'icon'	=> $this->icon,
-			'clone_id'  => $settings['clone_id'],
-			'active'	=> $settings['active']
-		);
-
-		register_metatab( $tab_settings, $tab);
+		return $options;
 	}
 
 	function post_type_setup(){
@@ -240,7 +246,7 @@ class Folio extends PageLinesSection {
 			'label'			=> __('Folios', 'folio'),
 			'singular_label'	=> __('Folio', 'folio'),
 			'description'	=> __('For creating Folios', 'folio'),
-			'menu_icon'		=> $this->icon,
+			'menu_icon'		=> $this->base_url.'/icon.png',
 			'supports'		=> array('title', 'editor', 'thumbnail'),
 		);
 		$taxonomies = array(
@@ -261,72 +267,22 @@ class Folio extends PageLinesSection {
 
 	}
 
+	function custom_meta( array $meta_boxes ) {
 
-	function post_meta_setup(){
-
-		$how_to_use = '
-			<strong>1.</strong> Go to Wordpress backend and create a new Folio. </br></br>
-			<strong>2.</strong> Input Title, Content (Optional), and a Link to the Folio (Optional). You also have to set a Thumbnail for the Folio. </br></br>
-			<strong>3.</strong> Choose Categories for your Folio . </br></br>
-			<strong>4.</strong> Go back to Folio\'s Section options and choose which category to show. Here you can also set the thumbnail height.
-
-			<div class="row zmb">
-				<div class="span6 tac zmb">
-					<a class="btn btn-info" href="http://forum.pagelines.com/71-products-by-aleksander-hansson/" target="_blank" style="padding:4px 0 4px;width:100%"><i class="icon-ambulance"></i>          Forum</a>
-				</div>
-				<div class="span6 tac zmb">
-					<a class="btn btn-info" href="http://betterdms.com" target="_blank" style="padding:4px 0 4px;width:100%"><i class="icon-align-justify"></i>          Better DMS</a>
-				</div>
-			</div>
-			<div class="row zmb" style="margin-top:4px;">
-				<div class="span12 tac zmb">
-					<a class="btn btn-success" href="http://shop.ahansson.com" target="_blank" style="padding:4px 0 4px;width:100%"><i class="icon-shopping-cart" ></i>          My Shop</a>
-				</div>
-			</div>
-
-		';
-
-		$type_meta_array = array(
-
-			'single_folio_help'  => array(
-				'title'  => __( 'How To Use', 'folio' ),
-				'type'   => 'help',
-				'exp'   => $how_to_use,
-			),
-
-			'single_folio_options' => array(
-				'type' => 'multi_option',
-				'title' => __('Folio settings', 'folio'),
-				'selectvalues' => array(
-
-					'single_folio_link'  => array(
-						'inputlabel'  => __( 'Link to project', 'folio' ),
-						'type'   => 'text',
-					),
+	    $meta_boxes[] = array(
+	        'title' => 'Folio Setup',
+	        'pages' => 'folio',
+	        'fields' => array(
+	        	array(
+				    'id'   => 'single_folio_link',
+				    'name' => __( 'Link to project', 'folio' ),
+				    'type' => 'text_url',
+				    'cols' => 12,
 				),
 			),
+	    );
 
-		);
-
-		$post_types = array($this->id);
-
-		$type_metapanel_settings = array(
-			'id'		=> 'folio-metapanel',
-			'name'	=> 'Folio Options',
-			'posttype'  => $post_types,
-		);
-
-		global $p_meta_panel;
-
-		$p_meta_panel =  new PageLinesMetaPanel( $type_metapanel_settings );
-
-		$type_metatab_settings = array(
-			'id'		=> 'folio-type-metatab',
-			'name'	=> 'Folio Options',
-			'icon'	=> $this->icon
-		);
-
-		$p_meta_panel->register_tab( $type_metatab_settings, $type_meta_array );
+	    return $meta_boxes;
 
 	}
 
